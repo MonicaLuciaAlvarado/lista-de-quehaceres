@@ -1,72 +1,53 @@
 import React, {useState} from 'react';
 const Actividades = (props)=>{
     const [array,setArray]=useState([{etiqueta: "actividad 1", contenido: "Get Python Black Belt", seleccionada: false}]);
-    const [nueva,setNueva]=useState({});
-    var actividadSeleccionada= {};
-    var contenido = "";
+    const [contenido,setContenido] = useState("");
     const [num,setNum]=useState(2);
-    const [arrayTareas, setArrayTareas]=useState([]);
-    var arrayModificada=[];
-    var arrayTareasModificada=[];
 
     const anadirActividad=(e)=>{
         e.preventDefault();
-        setArray([...array,nueva]);
+        console.log(contenido);
+        let nuevaActividad = {etiqueta:"actividad "+num, contenido: contenido, seleccionada:false};
+        setNum(num+1);
+        setArray([...array,nuevaActividad]);
+        setContenido("");
     }
     const crearNueva=(e)=>{
-        setNueva({etiqueta:"actividad "+num, contenido: e.target.value, seleccionada:false});
-        setNum(num+1);
-        contenido=e.target.value;
+        setContenido(e.target.value);
     }
-    const devolverActividadSeleccionada=(e)=>{
-        e.preventDefault();
-        actividadSeleccionada.etiqueta=array.find(actividad => actividad.contenido===e.target.value).etiqueta;
-        actividadSeleccionada.contenido=e.target.value;
-        actividadSeleccionada.seleccionada=false;
+    const completada=(i)=>{
+        const item=array[i];
+        item.seleccionada=!item.seleccionada;
+        setArray([...array.slice(0,i),item,...array.slice(i+1)]);
     }
-    const anadirTarea=(e)=>{
-        e.preventDefault();
-        setArrayTareas([...arrayTareas, actividadSeleccionada]);
-        arrayModificada=array.filter(activities=>activities.contenido!==actividadSeleccionada.contenido);
-        setArray(arrayModificada);
-    }
-    const eliminar=(e)=>{
-        e.preventDefault();
-        console.log();
-        arrayTareasModificada=arrayTareas.filter(activities=>activities.contenido!=="hola");
-        setArrayTareas(arrayTareasModificada);
+    const eliminar=(i)=>{
+        const item=array[i];
+        if(item.seleccionada===true){
+            item.seleccionada=!item.seleccionada;
+            const nuevo=array.filter(act=>act.contenido!==item.contenido);
+            setArray(nuevo);
+            console.log(array[i].seleccionada);
+        }
+        else{}
     }
     return(
-        <div>
+        <div className='cuerpo'>
             <form onSubmit={anadirActividad}>
                 <div className='entrada'>
                     <label htmlFor='actividad'>Nueva actividad: </label>
-                    <input type="text" className='casilla' onChange={crearNueva} name='actividad' placeholder='Escriba una actividad'/>
-                    <input type='submit' value="Crear Actividad"/>
+                        <input type="text" className='casilla' onChange={crearNueva} name='actividad' placeholder='Escriba una actividad' value={contenido}/>
+                    <input type='submit' value="Crear Actividad" className='btn btn-primary but'/>
                 </div>
             </form>
-
-        <select onChange={devolverActividadSeleccionada}>
-        {
-            array.map((item,i)=>
-            <option key={i}>{item.contenido}</option>
-            )
-        }
-        </select>
-
-        <form onSubmit={anadirTarea}>
-            <input type='submit' value="Añadir tarea"/>
-        </form>
-
         <ul>{
-            arrayTareas.map((item,i)=>
-            <li key={i} id={i} onChange={e=>item.seleccionada=true}>
-                <input type='checkbox'/>
+            array.map((item,i)=>
+            <li key={i} className='fila'>
+                <input type='checkbox' id={i} onClick={e=>completada(i)}/>
                 {
                 item.seleccionada?
                 <p className="rojo">{item.contenido}</p>:<p>{item.contenido}</p>
                 }
-                <button onChange={eliminar}>Delete!</button>
+                <button className="but btn btn-dark" onClick={e=>{eliminar(i)}}>Delete!</button>
                 </li>
             )
         }</ul>

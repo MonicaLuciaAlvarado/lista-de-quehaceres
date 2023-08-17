@@ -1,3 +1,15 @@
+*{
+  outline:0;
+  padding:0;
+  margin: 0;
+  border: 0;
+  list-style: none;
+  font-family: 'Quicksand', sans-serif;
+}
+.cuerpo{
+  margin: 15vh;
+  padding: 5vh;
+}
 .App {
   text-align: center;
 }
@@ -37,5 +49,32 @@
   }
 }
 .rojo {
-  color: red;
+  text-decoration:line-through;
+}
+.fila{
+  display: flex;
+  gap: 2vh;
+  width: 80%;
+  align-items: center;
+}
+.entrada{
+  display: flex;
+  gap: 2vh;
+  width: 80%;
+  align-items: center;
+}
+p{
+  flex:2;
+  display: flex;
+  justify-content: center;
+}
+.but{
+  flex:0.8;
+}
+.casilla{
+  flex:1.5;
+}
+label{
+  flex:0.7;
+  margin-left: 1vh;
 }
