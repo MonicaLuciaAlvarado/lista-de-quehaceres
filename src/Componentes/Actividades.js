@@ -16,17 +16,21 @@ const Actividades = (props)=>{
         setContenido(e.target.value);
     }
     const completada=(i)=>{
-        const item=array[i];
-        item.seleccionada=!item.seleccionada;
-        setArray([...array.slice(0,i),item,...array.slice(i+1)]);
+        const updateList = array.map((task, mapIndex)=>{
+            if(i===mapIndex){
+                task.seleccionada =!task.seleccionada;
+            }
+            return task;
+        });
+        setArray(updateList);
     }
     const eliminar=(i)=>{
         const item=array[i];
         if(item.seleccionada===true){
-            item.seleccionada=!item.seleccionada;
-            const nuevo=array.filter(act=>act.contenido!==item.contenido);
-            setArray(nuevo);
-            console.log(array[i].seleccionada);
+            const newList = array.filter((_task, iFilter)=>{
+                return iFilter !== i;
+            });
+            setArray(newList);
         }
         else{}
     }
@@ -42,7 +46,7 @@ const Actividades = (props)=>{
         <ul>{
             array.map((item,i)=>
             <li key={i} className='fila'>
-                <input type='checkbox' id={i} onClick={e=>completada(i)}/>
+                <input type='checkbox' id={i} onClick={()=>completada(i)} checked={item.seleccionada}/>
                 {
                 item.seleccionada?
                 <p className="rojo">{item.contenido}</p>:<p>{item.contenido}</p>
